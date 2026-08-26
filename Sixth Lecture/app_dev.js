@@ -1,8 +1,6 @@
 const { readdirSync } = require("fs");
 const { join } = require("path");
 const { spawn } = require("child_process");
-// const { get } = require("http");
-// const { dir, time } = require("console");
 process.stdin.setRawMode(true);
 
 let user_input = 0;
@@ -11,6 +9,7 @@ let player = undefined;
 let song_is_playing = false;
 let duration = undefined;
 let timeElapsed = undefined;
+let progress = undefined;
 
 async function getSongDuration(directoryPath) {
   return new Promise((res, rej) => {
@@ -25,7 +24,7 @@ async function getSongDuration(directoryPath) {
 
 function progressBarLoader(duration) {
   timeElapsed = 0;
-  setInterval(() => {
+  progress = setInterval(() => {
     if (song_is_playing && player) {
       timeElapsed += 0.1;
     }
@@ -49,10 +48,22 @@ function listSongs(directoryPath) {
     .join("\n");
   process.stdout.write(menuText);
   let percentage = Math.round((timeElapsed / duration) * 100);
-  if (song_is_playing) {
+  if (player) {
     process.stdout.write(
-      `\n${timeElapsed.toFixed(2)} / ${duration} : ${percentage}`,
+      `\n${Math.floor(timeElapsed / 60)}:${Math.floor(timeElapsed % 60)
+        .toString()
+        .padStart(2, "0")} | ${Math.floor(duration / 60)}:${Math.floor(
+        duration % 60,
+      )
+        .toString()
+        .padStart(2, "0")}`,
     );
+    let bar =
+      "\n" +
+      "-".repeat(Math.max(percentage - 1, 0)) +
+      "o" +
+      "-".repeat(100 - percentage);
+    process.stdout.write(bar);
   }
 }
 
@@ -74,6 +85,7 @@ process.stdin.on("data", (data) => {
       song_is_playing = true;
     } else {
       player.stdin.write("quit\n");
+      clearInterval(progress);
       process.exit(0);
       song_is_playing = false;
     }
@@ -98,12 +110,14 @@ process.stdin.on("data", (data) => {
   }
   if (data[0] == "0x6E") {
     player.stdin.write("pause\n");
+    clearInterval(progress);
     user_input = Math.min(songs.length - 1, user_input + 1);
     listSongs(join("songs"));
     playSongs(join("songs", songs[user_input]));
   }
   if (data[0] == "0x64") {
     player.stdin.write("pause\n");
+    clearInterval(progress);
     user_input = Math.max(0, user_input - 1);
     listSongs(join("songs"));
     playSongs(join("songs", songs[user_input]));
