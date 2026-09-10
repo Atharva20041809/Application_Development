@@ -1,0 +1,156 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f4f5;
+}
+
+.chat-container {
+    width: 700px;
+    max-width: 90%;
+    margin: 30px auto;
+}
+
+.chat-container h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.chat-box {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+
+    /* IMPORTANT */
+    height: auto;
+    overflow: visible;
+
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+/* Messages */
+
+.message {
+    margin-bottom: 20px;
+    max-width: 80%;
+}
+
+.message.user {
+    margin-left: auto;
+    text-align: right;
+}
+
+.message.assistant {
+    margin-right: auto;
+}
+
+.message-role {
+    font-size: 13px;
+    font-weight: bold;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.message-content {
+    display: inline-block;
+    padding: 12px 16px;
+    border-radius: 12px;
+    background: #f1f1f1;
+    line-height: 1.5;
+    text-align: left;
+
+    /* Keeps long responses readable */
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+}
+
+.message.user .message-content {
+    background: #222;
+    color: white;
+}
+
+/* Welcome */
+
+.welcome {
+    text-align: center;
+    padding: 120px 20px;
+    color: #666;
+}
+
+.welcome h2 {
+    color: #222;
+}
+
+/* Input */
+
+.input-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+
+    /* Keeps input visible while scrolling */
+    position: sticky;
+    bottom: 20px;
+    background: #f4f4f5;
+    padding: 10px 0;
+}
+
+#input {
+    flex: 1;
+    padding: 14px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    outline: none;
+    background: white;
+}
+
+#input:focus {
+    border-color: #555;
+}
+
+button {
+    padding: 0 22px;
+    border: none;
+    border-radius: 10px;
+    background: #222;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+button:disabled {
+    background: #aaa;
+    cursor: not-allowed;
+}
+
+/* Loading */
+
+.loading-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #666;
+}
+
+.spinner {
+    width: 20px;
+    height: 20px;
+    border: 3px solid #ddd;
+    border-top: 3px solid #222;
+    border-radius: 50%;
+    animation: rotate 0.8s linear infinite;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
